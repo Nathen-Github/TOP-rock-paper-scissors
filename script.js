@@ -2,11 +2,20 @@
 playGame();
 
 function playGame() {
+    //Initializing scores
+    let humanScore = 0, computerScore = 0;
     //5 rounds are played
     for (i = 0; i < 5; i++) {
         //playRound is the function to play one round of RPS
         let result = playRound(humanSelection(), computerSelection());
+        if (result !== "tie") {
+            result === "player" ? humanScore++ : computerScore++;
+        }
     }
+    humanScore > computerScore ?
+        console.log("YOU WIN!")
+        :
+        console.log("YOU LOSE!");
 }
 
 function playRound(humanSelection, computerSelection) {
