@@ -1,78 +1,82 @@
-//The starting function
-playGame();
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+const contentWrap = document.querySelector(".content-wrap");
+const buttonWrap = document.querySelector(".rps-button-wrapper");
+const textWrap = document.querySelector(".title-wrapper");
 
-function playGame() {
-    //Initializing scores
-    let humanScore = 0, computerScore = 0;
-    //5 rounds are played
-    for (i = 0; i < 5; i++) {
-        //playRound is the function to play one round of RPS
-        let result = playRound(humanSelection(), computerSelection());
-        if (result !== "tie") {
-            result === "player" ? humanScore++ : computerScore++;
-        }
-    }
-    humanScore > computerScore ?
-        console.log("YOU WIN!")
-        :
-        console.log("YOU LOSE!");
+rock.addEventListener("click", () => {
+    handleClick("rock");
+})
+
+paper.addEventListener("click", () => {
+    handleClick("paper");
+})
+
+scissors.addEventListener("click", () => {
+    handleClick("scissors");
+})
+
+function handleClick(whichRPS) {
+    contentWrap.removeChild(buttonWrap);
+    contentWrap.removeChild(textWrap);
+    
+    const result = playRound(whichRPS, computerSelection());
+    const showResult = document.createElement("p");
+    showResult.setAttribute("id", "result");
+    showResult.textContent = result;
+
+    const retry = document.createElement("div");
+    retry.textContent = "Retry";
+    retry.setAttribute("id", "retry");
+
+    contentWrap.appendChild(retry);
+    contentWrap.appendChild(showResult);
+
+    retry.addEventListener("click", () => {
+        resetPage(retry, showResult);
+    })
 }
 
+function resetPage(retry, showResult) {
+    contentWrap.removeChild(retry);
+    contentWrap.removeChild(showResult);
+    contentWrap.appendChild(textWrap);
+    contentWrap.appendChild(buttonWrap);
+}
+
+//The starting function
 function playRound(humanSelection, computerSelection) {
     //Game win and lose logic
     if (humanSelection === "rock") {
         if (computerSelection === "rock") {
-            console.log("It's a tie!")
-            return "tie";
+            return "It's a tie!";
         } else if (computerSelection === "paper") {
-            console.log("You lose! Paper beats Rock!")
-            return "computer";
+            return "You lose! Paper beats Rock!";
         } else if (computerSelection === "scissors") {
-            console.log("You win! Rock beats Scissors!")
-            return "player"
+            return "You win! Rock beats Scissors!"
         }
     } else if (humanSelection === "paper") {
         if (computerSelection === "rock") {
-            console.log("You win! Paper beats Rock!")
-            return "player";
+            return "You win! Paper beats Rock!";
         } else if (computerSelection === "paper") {
-            console.log("It's a tie!")
-            return "tie";
+            return "It's a tie!";
         } else if (computerSelection === "scissors") {
-            console.log("You lose! Scissors beats Paper!")
-            return "computer"
+            return "You lose! Scissors beats Paper!"
         }
     } else if (humanSelection === "scissors") {
         if (computerSelection === "rock") {
-            console.log("You lose! Rock beats Scissors!")
-            return "computer";
+            return "You lose! Rock beats Scissors!";
         } else if (computerSelection === "paper") {
-            console.log("You win! Scissors beats Paper!")
-            return "player";
+            return "You win! Scissors beats Paper!";
         } else if (computerSelection === "scissors") {
-            console.log("It's a tie!")
-            return "tie"
+            return "It's a tie!";
         }
     }
-}
-
-function humanSelection() {
-    let selection;
-    //Loops until input is valid
-    while (true) {
-        selection = prompt("Rock, paper, or scissors? ").toLowerCase();
-        if (selection == "rock" || selection == "paper" || selection == "scissors") {
-            //Breaks the loop once input is valid
-            break;
-        }
-    }
-    return selection;
 }
 
 function computerSelection() {
-    //Math.random() * (max - min) + min -> this is the code to get a random number between max-min.
-    //We convert the float result to an int by converting to an array and getting the first index
-    let random = (Math.random() * (3 - 1) + 1).toString().split('')[0];
+    let random = Math.floor(Math.random() * 3) + 1;
     //Unary plus to convert String result to Number
     switch(+random) {
         case 1:
